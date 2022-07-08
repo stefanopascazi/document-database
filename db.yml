@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  sistema_documentale_database:
+    image: mysql:latest
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+    container_name: sistema_documentale_database
+    environment:
+      MYSQL_DATABASE: documents
+      MYSQL_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_ROOT_PASSWORD: fwojeoiguout43u9480
+    volumes:
+      - sistema_documentale_database:/var/lib/mysql:rw
+    networks:
+      - sistema_documentale_backend_network
+    ports:
+      - 3536:3306
+    restart: always
+
+volumes:
+  sistema_documentale_database:
+networks:
+  sistema_documentale_backend_network:
+    driver: bridge

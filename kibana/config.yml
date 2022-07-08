@@ -1,0 +1,9 @@
+#
+# ** THIS IS AN AUTO-GENERATED FILE **
+#
+
+# Default Kibana configuration for docker target
+server.name: sistema_editoriale_kibana
+server.host: "localhost"
+elasticsearch.hosts: [ "http://sistema_editoriale_elastic_search:9201" ]
+monitoring.ui.container.elasticsearch.enabled: true

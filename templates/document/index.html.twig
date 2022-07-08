@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Document index{% endblock %}
+
+{% block body %}
+    <h1>Document index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Filepath</th>
+                <th>Filename</th>
+                <th>Extension</th>
+                <th>Parsed</th>
+                <th>Ocr</th>
+                <th>Excerpt</th>
+                <th>Description</th>
+                <th>Content</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for document in documents %}
+            <tr>
+                <td>{{ document.id }}</td>
+                <td>{{ document.title }}</td>
+                <td>{{ document.filepath }}</td>
+                <td>{{ document.filename }}</td>
+                <td>{{ document.extension }}</td>
+                <td>{{ document.parsed }}</td>
+                <td>{{ document.ocr }}</td>
+                <td>{{ document.excerpt }}</td>
+                <td>{{ document.description }}</td>
+                <td>{{ document.content }}</td>
+                <td>
+                    <a href="{{ path('app_document_show', {'id': document.id}) }}">show</a>
+                    <a href="{{ path('app_document_edit', {'id': document.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_document_new') }}">Create new</a>
+{% endblock %}

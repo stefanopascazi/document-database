@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\DocumentContentRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+#[ORM\Entity(repositoryClass: DocumentContentRepository::class)]
+class DocumentContent
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    #[Groups([
+        "documentContent"
+    ])]
+    private $id;
+
+    #[ORM\Column(type: 'text')]
+    #[Groups([
+        "documentContent"
+    ])]
+    private $content;
+
+    #[ORM\ManyToOne(targetEntity: Document::class, inversedBy: 'content')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        "documentContent_document"
+    ])]
+    private $document;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getDocument(): ?Document
+    {
+        return $this->document;
+    }
+
+    public function setDocument(?Document $document): self
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+}
