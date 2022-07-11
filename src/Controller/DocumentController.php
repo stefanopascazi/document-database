@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Document;
 use App\Repository\DocumentRepository;
+use App\Repository\DocumentContentRepository;
 use App\Service\FileUploader;
 use App\Factory\ResponseFactory;
 use App\Form\DocumentType;
@@ -73,7 +74,7 @@ class DocumentController extends AbstractController
     }
 
     #[Route('/uploads/{id}', name: 'uploads', methods: ['POST'])]
-    public function upload(Request $request, Document $document, DocumentRepository $documentRepository, FileUploader $fileUploader, MessageBusInterface $bus): Response
+    public function upload(Request $request, Document $document, DocumentRepository $documentRepository, DocumentContentRepository $documentContentRepository, FileUploader $fileUploader, MessageBusInterface $bus): Response
     {
         $upload = $request->files->get("file");
         if( $upload )
@@ -85,7 +86,7 @@ class DocumentController extends AbstractController
             $document->setFilename($filename);
             $document->setParsed(0);
 
-            $result = $documentRepository->getDocumentContentByProductId($document->getId());
+            $result = $documentContentRepository->findBy(["document" => $document]);
             if( count($result) > 0 )
             {
                 foreach( $result as $entity )
@@ -106,7 +107,7 @@ class DocumentController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Document $document, DocumentRepository $documentRepository): Response
+    public function delete(Document $document, DocumentRepository $documentRepository, DocumentContentRepository $documentContentRepository): Response
     {
         if( $document->getFilename() != null )
         {
@@ -114,7 +115,7 @@ class DocumentController extends AbstractController
                 $document->getFilepath() . "/" . $document->getFilename()
             );
 
-            $result = $documentRepository->getDocumentContentByProductId($document->getId());
+            $result = $documentContentRepository->findBy(["document" => $document]);
             if( count($result) > 0 )
             {
                 foreach( $result as $entity )

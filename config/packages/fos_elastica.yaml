@@ -15,12 +15,14 @@ fos_elastica:
                         id: { type: integer }
                         title: { boost: 2, type: text }
                         description: { boost: 4, type: text }
-                        category: 
-                            type: "nested"
-                            properties:
-                                title: {boost: 2, type: text}
-                        tag: 
-                            type: "nested"
-                            properties:
-                                title: {boost: 2, type: text}
+                category: 
+                    type: "nested"
+                    properties:
+                        id: {type: integer, boost: 10 }
+                        title: {boost: 2, type: text}
+                tag: 
+                    type: "nested"
+                    properties:
+                        id: {type: integer, boost: 10 }
+                        title: {boost: 2, type: text}
 

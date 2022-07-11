@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Tag;
 use App\Repository\TagRepository;
 use App\Repository\DocumentRepository;
+use App\Repository\DocumentContentRepository;
 use App\Factory\ResponseFactory;
 use App\Form\TagType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,7 +33,7 @@ class TagController extends AbstractController
     }
 
     #[Route('/', name: 'new', methods: ['POST'])]
-    public function new(Request $request, TagRepository $tagRepository, DocumentRepository $documentRepository ): Response
+    public function new(Request $request, TagRepository $tagRepository, DocumentRepository $documentRepository, DocumentContentRepository $documentContentRepository ): Response
     {
         $tag = new Tag();
         $form = json_decode($request->getContent(), true);
@@ -42,6 +43,12 @@ class TagController extends AbstractController
         {
             $document = $documentRepository->find($form['document']['id']);
             $tag->addDocument($document);
+
+            $contents = $documentContentRepository->findBy(["document" => $document]);
+            foreach( $contents as $content )
+            {
+                $tag->addDocumentContent($content);
+            }
         }
 
         $tagRepository->add($tag, true);

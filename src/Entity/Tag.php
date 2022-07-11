@@ -35,9 +35,16 @@ class Tag
     ])]
     private $documents;
 
+    #[ORM\ManyToMany(targetEntity: DocumentContent::class, mappedBy: 'tag')]
+    #[Groups([
+        "tag_documentContents"
+    ])]
+    private $documentContents;
+
     public function __construct()
     {
         $this->documents = new ArrayCollection();
+        $this->documentContents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -79,6 +86,33 @@ class Tag
     {
         if ($this->documents->removeElement($document)) {
             $document->removeTag($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentContent>
+     */
+    public function getDocumentContents(): Collection
+    {
+        return $this->documentContents;
+    }
+
+    public function addDocumentContent(DocumentContent $documentContent): self
+    {
+        if (!$this->documentContents->contains($documentContent)) {
+            $this->documentContents[] = $documentContent;
+            $documentContent->addTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentContent(DocumentContent $documentContent): self
+    {
+        if ($this->documentContents->removeElement($documentContent)) {
+            $documentContent->removeTag($this);
         }
 
         return $this;

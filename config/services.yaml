@@ -25,6 +25,10 @@ services:
         arguments:
             $targetDirectory: '%file_directory%'
 
+    App\Factory\CreateElasticaQuery:
+        autowire: true
+
+
     App\Controller\SearchController:
         tags: [controller.service_arguments]
         public: true

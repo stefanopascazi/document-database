@@ -41,10 +41,14 @@ class Category
     ])]
     private $documents;
 
+    #[ORM\ManyToMany(targetEntity: DocumentContent::class, mappedBy: 'category')]
+    private $documentContents;
+
     public function __construct()
     {
         $this->category = new ArrayCollection();
         $this->documents = new ArrayCollection();
+        $this->documentContents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,6 +124,33 @@ class Category
     {
         if ($this->documents->removeElement($document)) {
             $document->removeCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentContent>
+     */
+    public function getDocumentContents(): Collection
+    {
+        return $this->documentContents;
+    }
+
+    public function addDocumentContent(DocumentContent $documentContent): self
+    {
+        if (!$this->documentContents->contains($documentContent)) {
+            $this->documentContents[] = $documentContent;
+            $documentContent->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentContent(DocumentContent $documentContent): self
+    {
+        if ($this->documentContents->removeElement($documentContent)) {
+            $documentContent->removeCategory($this);
         }
 
         return $this;
