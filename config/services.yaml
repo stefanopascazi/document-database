@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     file_directory: '%kernel.project_dir%/public/uploads/files'
+    # optionally to configure JWT use https://github.com/firebase/php-jwt
+    jwt_secret_env: '%env(JWT_SECRET_ENV)%'
 
 services:
     # default configuration for services in *this* file
@@ -27,6 +29,11 @@ services:
 
     App\Factory\CreateElasticaQuery:
         autowire: true
+
+    App\Security\: 
+        resource: '../src/Security/'
+        arguments:
+            $jwt_secret: '%jwt_secret_env%'
 
 
     App\Controller\SearchController:
